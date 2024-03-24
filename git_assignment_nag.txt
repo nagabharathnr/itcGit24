@@ -1,0 +1,69 @@
+Git Assignment - Nagabharath
+
+1.How do you initialize a new Git repository named "project1" on your local machine?
+	create a folder at required location
+	open git bash here or open command prompt and go to this directory
+	git init - command to initialise the git
+	
+2.How do you add a new file named "index.html" to the "project1" repository?
+	change the directory to the repo folder and then create a file
+	touch index.html
+	
+3.How do you stage the changes made to "index.html" for committing?
+	git add index.html (or) git add .
+	
+4.How do you commit the changes made to "index.html" with a commit message of "Add index.html"?
+	git commit -m "add index.html file
+	
+5.How do you view the commit history of the "project1" repository?
+	Using "git log" command
+	
+6.How do you create a new branch named "feature-branch" in the "project1" repository?
+	git branch feature-branch
+	
+7.How do you switch to the "feature-branch" in the "project1" repository?
+	git checkout feature-branch 
+	
+8.How do you make changes to "index.html" in the "feature-branch"?
+	vi index.html 
+	insert changes in this file and then save and exit using Esc :wq
+	
+9.How do you stage and commit the changes made in the "feature-branch" with a commit message of "Update index.html in feature branch"?
+	git add .
+	git commit -m "update the index.html file in feature-branch 
+
+10.How do you switch back to the main branch in the "project1" repository?
+	git checkout main 
+
+11.How do you merge the changes from the "feature-branch" into the main branch?
+	git merge feature-branch 
+
+12.How do you resolve any merge conflicts that occur during the merge process?
+	a. git log --merge -> The git log --merge command helps to produce the list of commits that are causing the conflict.
+	c. git checkout -> The git checkout command is used to undo the changes made to the file, or for changing branches.
+	d. git reset --mixed -> The git reset --mixed command is used to undo changes to the working directory and staging area.
+	e. git merge --abort -> The git merge --abort command helps in exiting the merge process and returning back to the state before the merging began.
+
+13.How do you view the changes introduced by the merge commit?
+	git diff -> The git diff command helps to identify the differences between the states repositories or files.
+
+14.How do you create a new tag named "v1.0" for the current commit in the "project1" repository?
+	git tag v1.0
+
+15.How do you push the "project1" repository to a remote repository named "origin"?
+	git push -u project_1
+
+16.How do you clone the "project1" repository from a remote repository to another machine?
+	git clone <enter the url of the repository>
+
+17.How do you fetch the latest changes from the remote repository to your local "project1" repository?
+	git fetch 
+
+18.How do you pull the latest changes from the remote repository into your current branch in the "project1" repository?
+	git pull origin project_1
+
+19.How do you create a new branch named "bug-fix" in the "project1" repository based on a specific commit?
+	git flow bug-fix start <bug name>
+
+20.How do you revert the last commit made in the "project1" repository?
+	git reset -> The git reset command is used at the time of merge conflict to reset the conflicted files to their original state.
