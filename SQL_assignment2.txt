@@ -1,0 +1,114 @@
+
+SQL 
+1.Types of commands and their examples.
+	a. DDL (Data Definition Language) - Create, Alter, Drop, Truncate
+	b. DML (Data Manipulation Language) - Insert, Update, Delete
+	c. DCL (Data Control Language) - Grant, Revoke
+	d. DQL (Data Query Language) - Select
+	e. TCL (Transaction Query Language) - Commit, Savepoint, Rollback
+	
+2.What is Normalization and denormalization?  
+	Normalisation: It is a technique to divide the data in to multiple tables to reduce the data redundancy and inconsistency and to achieve data integrity.
+	Denormalisation: It is a technique to combine the tables into a single table to make the data retrieval faster.
+	
+3.Explain 1NF, 2NF, 3NF.
+	Normalisation in database is done through series of normalisation forms. 
+	1NF - if a table has no repeated groups, then its a 1NF
+	2NF - if a table is in 1NF and every non-key attribute is dependent on the primary key, then its a 2NF
+	3NF - if a table is in 2NF and has no transitive dependencies, then its a 3NF 
+	
+4.Share use case where you had to do denormalization in database..
+	
+	
+5.What is primary key and foreign key?
+	Primary Key - Primary key, any column which is 'Unique' and not null and is used to fetch the information from the table.
+	Foreign Key - Foreign key, it is a primary key in other table and used to connect to another table to fetch the information. It can be null as well.
+	
+6.what is alternate and candidate key?
+	Alternate Key - In a table there will be only 1 primary key and the remaining cadidate keys are alternate keys.
+	Cnadidate Key - All the eligible keys which can be used as a primary key is called as candidate key.
+	
+7.What are window functions?
+	Window functions performs calculations on set of rows. They are Aggregations, Ranking functions and Value functions. 
+
+8.Explain Ranking Functions? GIven a small table , write the output.
+	Using Rank() function we can assign a ranks to each row based on the condition and column.
+	Ex: If we consider students and their marks in a class and to assign ranks based on the marks scored.
+	Table: Col names: student_name | class_name | student_marks 
+	Row1: Naga | class 10 | 90
+	Row2: Rits | class 9 | 70
+	Row3: Harsh | class 8 | 85
+	select student_name, RANK()over(order by student_marks desc) as student_ranks from Results
+	O/P: col names: student_name | student_ranks
+	Row1: Naga | 1
+	Row2: Harsh | 2
+	Row3: Rits | 3
+9.Types of Joins? With example and usecase. All the number of records return and exact records.
+	a. Inner Join -  it will return matching values in both the tables 
+	b. Left Join - it will return all the values from left table and matched values from the right table.
+	c. Right Join - it will return all the values from the right table and matched values from the left table.
+	d. Full Join - it will return all the values when theres a match either in left or right table.
+
+10.Use case when self join is required.
+	Self joins are used to join with itself to retreive the data like hierarchical data or parent-child relations. 
+	
+
+11.What is subquery?
+	A query inside a query is called as subquery. An inner query fetches the information and send the details to an outer query. Also, first an inner query gets executed and then outer query.
+
+12.What is corelated subquery?
+	An inner query uses values from the outer query 
+
+13.What is CTE? 
+	Common Table Expressions, which exists temporarily and not stored anywhere in the database.
+
+14.What is derived table?
+	A derived table is a technique of creating a temporary set of records under the from table section which can be used within another query.
+
+15.Find third highest employee based on salary?
+	First we can fetch the emplyee details based on the salary and ordering it in decending order. Now Offset first 2 rows and keep a limit to 1, it gives teh third highest emplyee detail.
+
+16.Find third highest employee based on salary  per department?
+	In subquery, we use Row_number() function along with partition by to rank the employees within each department based on their salaries. Now outer query filters the results to 3 top 3 rows and then use offset 2 and limit 1 to get the third highest salary 
+
+17.How to find duplicate values in a single column?
+	Using group by, we can find the duplicate values for a targeted column 
+
+18.How to find duplicate values in a multiple column?
+	Using group by and having clause, we can find the duplicate values in multiple columns
+
+19.What are ACID properties? give example for each property
+	Atomicity, Consistency, Isolation and Durability
+	Atomocity - the entire transaction takes place at once or doesn't happen at all 
+	Consistency - the database must be consistent before and after the transaction	
+	Isolation - multiple transactions occur independently without any interference
+	Durability - changes of the successful transaction occurs even if the system failure occurs  
+
+20.Diff between union and union all
+	Union eliminates the duplicate rows but union all doesn't 
+
+21.Diff between primary key and unique key
+	Primary Key - this uniquely idenfies each record in a table but cannot store NULL values.
+	Union Key - this prevents duplicate values in a column and can store NULL values.
+
+22.Diff between truncate and delete
+	Delete - It removed single or specified records of data from an existing table.
+	Truncate - It removes the entire data/records from the table but keeps the table's schema.
+
+23.Diff between having and where
+	Where - where clause allows us to filter the data based on the certain conditions from specified rows.
+	Having - allows us to filter the data from a group by query based on the conditions involved in aggregations.
+
+24.SQL query execution order.
+	First it picks the table - From
+	then, where condition -> group by -> having -> select -> distinct -> order by -> offset -> limit
+
+25.What are indexes? Types of Indexes and their differences.
+	Indexes are used to retreive data from the database more quickly. 
+	Types of Indexes:
+	a. Create Index
+	b. Drop Index
+
+26.What is surrogate key? Give example where you used it and how.
+	A key which doesn't have any contextual and business meaning. 
+	Ex: Increasing sequential integer order or counter
