@@ -1,0 +1,139 @@
+1. How do you display the first 10 lines of a file using the command line?
+	Short: We can display using a 'head' command.
+	Command: head -n 10 filename 
+	
+2. How do you display the last 5 lines of a file using the command line?
+	Short: We can display last 5 lines of a file using the 'tail' command.
+	Command: tail -n 5 filename 
+	
+3. How do you sort the contents of a file in ascending order using the command line?
+	Short: We can sort the contents in a file using the 'sort' command.
+	Command: sort filename 
+	
+	Long: If incase we need to save the sorted contents of a file, we need to use the redirect option into a new file as shown in the command.
+	Command: sort filename > sorted_filename
+	
+4. How do you count the number of occurrences of a specific word in a file using the command line?
+	Short: Using grep command, we can count the number of occurances of a specified keyword in the required file.
+	Command: grep -o 'word' filename
+	
+	Long: To count the number of occurances, use the below command.
+	Command: grep -o 'word' filename | wc -l
+	grep -o 'word' filename: searches for the occurances of the word in the file and outputs each occurance on a separate line 
+	wc -l: this counts the number of lines 
+
+5. How do you find and replace a specific word in a file using the command line?
+	Short: Streame Editor 'sed' command does the job, it replaces the old_word with new_word 
+	Command: sed -i 's/old_word/new_word/g' filename
+	-i : this allows in-place editing, directly modifies the file 
+	's/old_word/new_word/g' : substitution command for sed, it replaces the old_word with new_word
+
+6. How do you display the size of a file in human-readable format using the command line?
+	Short: Using 'ls' command with the '-lh'
+	Command: ls -lh
+	-h : stands for human-readable and it formats the file size in human friendly way such as KB, MB, GB depending on the file size
+
+7. How do you display the current date and time in a specific format using the command line?
+	Short: Using 'date' command with appropriate format specifier in the terminal.
+	Command: date + "%Y-%m-%d %H:%M:%S"
+
+8. How do you find the process ID (PID) of a running process using the command line?
+	Short: 'pgrep' and 'pidof', both gives the running process names.
+	Long: If there are multiple processes with same name, 
+	'pgrep' - provides each of the processes in separate lines,
+	'pidof' - will list them in a same line separated by commas
+	Command: pgrep process_name | pidof process_name
+
+9. How do you kill a process using its process ID (PID) using the command line?
+	Short: 'kill' command with PID, kills the specified process.
+	Command: kill PID | kill 12345
+	
+	Long: By default, 'kill' command sends a SIGTERM signal to the process, which is a gentle request for termination. If the process doesn't respond to the SIGTERM signal, we can forcefully kill the process using -9 command.
+	Command: kill -9 PID 
+
+10. How do you create a compressed tar archive of a directory and exclude specific files from it using the command line?
+	Short: Using 'tar' and '--exclude' commands, we can compress archive of a directory and excluding the specfied files.
+	Command: tar -czvf archive_name.tar.gz --exclude='pattern' directory_name
+	-c : create a new archive
+	-z : compress the archive using gzip
+	-v : optional, this shows the on-going progress of the archiving
+	-f : specify the filename of the archive 
+	--exclude='pattern' : excludes the specified file called pattern
+	directory_name : name of the directory which we want to archive 
+	archive_name.tar.gz : replace this with the desired name for archive which we want 
+	'pattern' : exclude with the specific pattern. If we want to exclude all files with specific extension, we can mention '*.log' - excludes all files with the extension .log
+	
+11. How do you set an environment variable in Linux using the command line?
+	Short: Using 'export' command with 'value', we can set the environment variable. We can also set multiple variables in a single command line argument
+	Command: export VARIABLE_NAME = "value"
+	Ex: export my_var = "hello" my_var2 = "nag" my_var3 = "welcome"
+	
+	Long: If we want these environment variables to be present across terminal sessions, we need to add them under the shell configuration files such as '.bashrc' or '.bash_profile' or '.zshrc'. So that they are avaialble even when nwe close and create new terminal window.
+
+12. How do you list all installed packages on a Debian-based Linux distribution using the command line?
+	Short: Using 'dpkg' package manager command, along with 'grep' to filter out the package names.
+	Command: dpkg --get_selections | grep -v deinstall 
+	dpkg --get_selections : this command lists all the installed packages along with their selection state (such as 'install' or 'deinstall')
+	grep -v deinstall : this filter out any packages that are marked for deinstallation, ensures that only currently installed packages are listed
+	If terminal scrolls through the list too quickly, use the pipe with 'less' command for a easier viewing.
+	Ex: dpkg --get_selections | grep -v deinstall | less
+	If we want to save the installed package list, we can redirect them into a new file as shown below
+	Ex: dpkg --get_selections | grep -v deinstall > installed_packages.txt
+
+13. How do you change the permissions of a file to read-only for the owner and group using the command line?
+	Short: Using 'chmod 447 filename' or 'chmod r--r--rwx filename'
+	If others also granted with read-only, then - chmod 444 filename or chmod r--r--r-- filename 
+
+14. How do you find all files with a specific extension in a directory and its subdirectories using the command line?
+	Short: Using 'find' and 'name' commands
+	Command: find /path/to/directory -type f name "*.extension"
+	/path/to/directory : path of the directory which we want to start the search. We can provide '.' if we want to search in the current directory and sub-directories associated with it
+	'*.extensio' : recurssively searches for the files with mentioned extension in current and sub-directories and print their paths
+
+15. How do you create a backup of a file with a timestamp in its filename using the command line?
+	Short: Using 'cp' along with 'date' command
+	Command: cp filename "$(date +'%Y-%m-%d_%H-%M-%S')_filename.extension"
+	filename : replace this with the file we want to create a backup
+	$(date +'%Y-%m-%d_%H-%M-%S') : this generates the timestamp in the mentioned date format, we can change the format as well
+	_filename.extension : timestamp gets added as a suffix to this filename 
+
+16. How do you search for a specific string in all files within a directory and its subdirectories using the command line?
+	Short: Using 'grep' and '-r' (recursive), we can search for the specific string in mentioned directory as well as its sub-directories
+	Command: grep -r "example" .
+	"example" . : this searches for the 'example' string across current directory ('.') as well as its sub-directories
+
+17. How do you display the current network configuration (IP address, subnet mask, etc.) using the command line?
+	Short: 'ip addr show' or 'ifconfig', both displays the complete network configuration including IP adress, subnet mask and other configuration details
+	'ifconfig' - is depriciated in some distributions, but widely used.
+	'ip addr show' - this is newer and advanced, so it is recommended
+
+18. How do you create a new user with a specific home directory and set their password using the command line?
+	Short: Using 'useradd' and 'passwd' commands.
+	Command to create user: sudo useradd -m -d /path/to/home/directory username
+	Command to set the password: sudo passwd username 
+	Ex for user: sudo useradd -m -d /home/nag nag
+	-m : option to create home directory if it doesn't exists
+	Ex for password: sudo passwd nag | this will prompt to enter and confirm the password for this user 
+
+19. How do you display the available disk space on your system using the command line?
+	Short: Using 'df' and '-h' (human-readable)command.
+	
+	Long: We can also specify the filesystem path for detailed info about disk usage 
+	Ex: df -h /dev/sda1
+
+20. How do you schedule a command or script to run at a specific time using the cron system?
+	Short: Using 'crontab', we can schedule a command or script to run at specified time.
+	crontab -e : to open the our crontab's file for editing 
+	If we are opening the crontab for the first time, it prompts to choose the editor ex nano or vim.
+	Syntax for crontab: Minute Hour Day of Month Month Day of Week Command 
+	Minute: The minute of the hour (0-59).
+	Hour: The hour of the day (0-23).
+	Day of Month: The day of the month (1-31).
+	Month: The month (1-12) or abbreviations like Jan, Feb, etc.
+	Day of Week: The day of the week (0-7) or abbreviations like Sun, Mon, etc. (both 0 and 7 represent Sunday).
+	Command: The command or script you want to run.
+
+	Ex: 30 5 * * * /path/to/your/command
+	Note: After adding the cron job, save and exit the editor. In nano, you can do this by pressing Ctrl + X, then Y to confirm changes, and finally Enter to save.
+	Now, our command or script will run automatically according to the schedule you specified in the cron job
+	
