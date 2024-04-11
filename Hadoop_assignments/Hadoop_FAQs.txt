@@ -1,0 +1,244 @@
+1.Mention Hadoop distribution? Difference between CDH and CDP
+	Short - Hadoop is an open-source distribution framework, which provides large storage and processing of datasets using cluster models.
+	Different companies provide their own distribution system for Hadoop, in these the most popular ones are Cloudera Distribution for Hadoop (CDH) and Cloudera Data Platform (CDP).
+	 
+	Differences between CDH and CDP:
+		a. Architecture:
+			i. CDH - as it’s a traditional architecture, it is designed for on-premises hybrid deployments, where managing Hadoop clusters on physical or virtual servers inside an organisation's data centre. 
+			ii. CDP - it's a cloud-native architecture, optimised for hybrid and multi-cloud environments. It allows users to deploy and manage data services across different cloud platforms seamlessly and leverages the containerization for flexibility and scalability.
+		b. Deployment Flexibility:
+			i. CDH - primarily focused on on-premises and hybrid deployment. It also supports cloud integration.
+			ii. CDP - operates across hybrid and multi-cloud environments. It supports major cloud services such as AWS, Azure and Google Cloud.
+		c. Modularity and Flexibility:
+			i. CDH - monolithic approach, means various components of Hadoop architecture are tightly integrated and it works as a single platform.
+			ii. CDP - modular approach, where users have flexibility to manage individual services and they can choose to scale them up independently to provide efficient resource utilization.
+		
+
+2.Explain Hadoop Architecture
+	Short: Hadoop architecture consists of 4 components, which are: HDFS, YARN, MapReduce and Hadoop Common Utilities
+	
+	Long:
+		a. HDFS [Hadoop Distributed File System] :
+			i. It is a storage component of Hadoop which stores large datasets across multiple machines
+			ii. It is a Master[Name Node]/Slave[Data Node] architecture with single Name Node and multiple Data Nodes
+			iii. Name Node stores the metadata and Data Node stores the actual data which is divided into blocks form
+			iv. Data Nodes will have a replication factor which is of 3 copies and stored at different Data Nodes for fault tolerance
+			v. Rack-aware, which stores multiple Data Nodes at different locations to overcome fault tolerance, to improve reliability and perf
+		b. YARN [Yet Another Resource Negotiator] :
+			i. It is the resource management and job scheduling component of Hadoop
+			ii. It has a Resource Manager that allocates resources as well as schedules the jobs and Node Managers which has app masters and containers to execute the work
+		c. MapReduce:
+			i. It is the data processing engine of Hadoop, consists of 2 phases: Map [filtering and sorting] and Reduce [aggregations/summarization]
+			ii. MapReduce jobs are divided into smaller tasks that run in parallel across the cluster, enabling distributed processing of large datasets
+		d. Hadoop Common Utilities:
+			i. It contains the common utilities and libraries that required by the other Hadoop modules
+			ii. It contains the serialisation/deserialisations, filesystems abstractions, RPC implementations etc
+
+
+3.Configuration files used during hadoop installation
+	a. hadoop-env.sh:
+		a. This file specifies environment variables that affect the Hadoop daemons, such as the JAVA_HOME variable which points to the Java installation path
+	b. core-site.xml:
+		a. It contains configuration settings for hadoop core, like default filesystems URI, temporary data directory etc
+	c. hdfs-site.xml:
+		a. It contains configuration settings 
+
+4.Difference between Hadoop fs and hdfs dfs
+	The main difference lies in the scope of files that they handle:
+		a. Hadoop fs: generic command that allows us to interact with multiple file systems, including:
+			i. HDFS
+			ii. Local file systems
+			iii. Other file systems like, s3, webHDFS etc.
+		b. hdfs dfs: specifically designed to interact with only HDFS 
+			
+5.Difference between Hadoop 2 and Hadoop 3
+	Key differences between Hadoop 2 or Hadoop 3 are:
+		a. Fault Tolerance Mechanism:
+			i. Hadoop 2: relied on replication factor by storing 3 copies of data leading to over storage
+			ii. Hadoop 3: relied on Erasure coding, provides data durability with reduced replication factor which is of 1.5x
+		
+
+6.What is replication factor ? why it's important
+	Short: Replication factor in the context of hdfs, it refers to the number of redundant copies of data that are maintained across cluster nodes for fault tolerance.
+	Long: Why it is important is:
+		a. Data reliability and Fault Tolerance: if one node fails, the data can be recovered from other nodes and avoid data corruption
+		b. Disaster Recovery: replication across multiple racks provides protection against power outages, natural calamities etc
+		c. Improved data availability: multiple clients can access the same data at a time who are wt different geo locations
+		d. Load Balancing: avoids single node getting bottlenecks caused by multiple requests to a single node and it replicated data distributed across nodes
+		e. Parallel processing: enables parallel processing of same data across multiple nodes simultaneously like MapReduce jobs to increase performance
+
+7.What if Datanode fails?
+	Short: If a Data Node fails, we have the below mechanisms are in place to ensure data availability:
+		a. Replication Factors: it stores the redundant copies of data (3 copies) at different data nodes, so the same data can be recovered again
+		b. Rack Awareness: it contains the Data Nodes at different locations, if one of the location has a problem, it access the other rack and performs the actions and then recovers the racks
+		c. Automatic re-replication:
+		d. Data Balancing:
+		e. Automatic Failover:
+
+8.What if Namenode fails?
+	Short: it depends on the version of the Hadoop we are using:
+		a. Hadoop 1:
+			i. Name Node was a single point of failure in Hadoop 1
+			ii. If it fails, entire HDFS cluster is available until it is restarted or recovered
+		b. Hadoop 2 & Hadoop 3:
+			i. There are 2 redundant Name Nodes: Active Name Node and Standby Name Node
+			ii. Data Nodes send block reports and heart beats keeping the both Active Name Nodes, Standby Name Nodes up-to-date
+			iii. If Active Name Node fails, it activates the Standby Name Node as an Active Name Node within few seconds and avoids downtime
+			iv. Name Node metadata (fsimage and edit logs) is persistently stored on a group of a Journal Nodes(typically 3 nodes) using quorum-based protocol called Quorum Journal Manager (QJM)
+
+9.Why is block size 128 MB ? what if I increase or decrease the block size
+	Short: Default block size in Hadoop are 128MB for few key reasons:
+		a. Disk Transfer Rates:
+		b. Balanced Parallelism:
+		c. Storage Overhead:
+	
+	Increasing block size:
+		a. Reduces metadata overhead and disk seek times
+		b. Decreases parallelism and load balancing across nodes
+		c. May not fully utilize the disk bandwidth if block size is too much
+	
+	Decreasing block size:
+		a. Increases parallelism and load balancing across nodes
+		b. It increases metadata overhead and disk seek times
+		c. May not fully utilize the disk bandwidth if block size is too small
+		d. Increases storage overhead due to replication of smaller blocks
+
+10.Small file problem
+	Short: Small files are, a file size which is significantly smaller than the HDFS block size. It refers to the inefficiencies that arise when dealing with large number of small files in HDFS and MapReduce framework
+	
+	Long: 
+		a. Problems with HDFS:
+			i. Each file, directory and block in HDFS is represented as an object in the Name Node's memory. With millions of small files, this metadata overhead can exhaust the Name Node's memory
+			ii. Reading small files involves frequent seeks and hopping between Data Nodes, leading to inefficient data access patterns
+		b. Problems with MapReduce:
+			i. MapReduce typically processes one HDFS block per mapper task. With many small files, this results in a large number of mapper tasks, increasing the scheduling and bookkeeping overhead
+
+11.What is Rack awareness?
+	Short: Rack Awareness is a crucial feature in Hadoop, which makes decisions about data placements and transfers to provide data availability, performance, reliability and network bandwidth utilization.
+	
+	Long: 
+		a. Ex: we have 3 copies of data nodes, 2 we store it in one rack which is at location1 and another data node we store in second rack which is at location 2. if any natural calamities happens at location1, we have a backup available from location2
+		b. Hadoop uses data locality - means always picks the blocks from nearest Data Node
+
+12.What is SPOF ? how its resolved?
+	Short: SPOF stands for Single Point Of Failure, where it represents the Name Node and if NN fails, the whole Hadoop system goes down and can't access the data until it gets manually restarted. This was the problem with Hadoop 1 version, it is overcome in the later versions of Hadoop.
+	
+	Long:
+		a. In Hadoop 2 and above versions:
+			i. There's a High Availability setup, which has 2 Name Nodes: Active Name Node and Standby Name Node
+			ii. If the ANN fails, it makes the SNN as an ANN within few seconds
+			iii. The NN metadata's fsimage and edit logs were persistently stored in on a Journal Nodes using quorum based protocol called Quorum Journal Manager (QJM)
+			iv. Now the new ANN allowed to load the latest state of the data using Journal Nodes without losing any data 
+
+13.Explain zookeeper?
+	Short: ZookKeeper is a centralized service that provides distributed synchronization, configuration management, naming for distributed apps.
+	
+	Long: ZooKeeper is a service which is in between Name Node and Standby Name Node
+		1) ZooKeeper, makes one JN as a leader with write permission and other member nodes gets the updated/synced info from leader node. 
+		2) To elect the leader, it will always create JNs in odd numbers
+		3) When NN and SNN fails, the 'Leader' becomes the NN
+
+14.Difference between -put and -CopyFromLocal?
+	-put: 
+		a. This command is used to copy single or multiple files/directories from local (linux) into HDFS. Also it creates the necessary directories in HDFS if they are not exists.
+		b. Main difference is, this command performs the copy operation even if the source file is on the different machine than the HDFS cluster.
+	
+	-copyFromLocal: 
+		a. This command is similar to '-put' but it is used specifically while copying the files/directories from local to HDFS where source file is already present on the local machine where HDFS clusters are running
+		b. This is recommended if the source file is present in the local machine to avoid unnecessary network overhead
+
+15.What is erasure coding?
+	Short: 
+		a. Erasure coding is a data protection method in which data is divided into small blocks or fragments, encoded with redundant pieces of information and stored across different locations or storage media.
+	
+	Long:
+		a. How it works?
+			i. First it divides the data into smaller blocks
+			ii. Now it generates the additional redundant pieces of data called parity blocks using mathematical algorithms
+			iii. The original fragments of data and parity blocks are distributed and stored across multiple storages and geo locations
+			iv. The original data can be reconstructed or recovered from subset of the total number of fragments and parity blocks, even if some of them are lost or unavailable. 
+
+16.What is speculative execution?
+	Short: Whenever a particular node if taking more time to execute, Hadoop will assign the same task to another node and then whichever node completes the execution, that is taken as a output and job is completed.
+	
+	Long:
+		a. It's a crucial performance optimization technique employed by all modern high-performance CPUs
+		b. Better utilization of CPU resources by executing the instructions as soon as their operands are ready rather than waiting
+
+17.Explain Yarn Architecture
+	Short: Yet Another Resource Negotiator. It is a separate layer which has resource manager and job scheduler for data processing layer.
+	
+	Long: 
+		a. YARN architecture components:
+			i. Resource Manager: master is responsible for the resource allocation and management across the cluster
+				1) There are 2 components:
+					a) Scheduler - Performs resource allocation based on the configured policies like Capacity Scheduler or Fair Scheduler
+					b) Application Manager - Accepts jobs submissions and negotiates with containers for executing the application master
+				2) Node Manager:
+					a) Data Node wise, manages resources and monitors containers on each machine in the cluster
+					b) Responsible for launching and managing the containers on the node
+				3) Application Master:
+					a) Framework specific library that negotiates with Resource Manager and works with Node Manager to execute and monitor tasks
+					b) Each application(job) has its own application master
+				4) Container:
+					a) In YARN that encapsulates resources like CPU, memory, disk and network for executing tasks.
+		b. YARN architecture Workflow:
+			i. Client submits a job to the Resource Manager
+			ii. Resource Manager's Application Manager allocates the first container to launch the Application Master of that job
+			iii. Application Master negotiates with Resource Manager's scheduler for additional containers
+			iv. Scheduler allocates containers based on configured policies and available resources
+			v. Application Master work with Node Managers to launch and monitor the execution of tasks within the allocated containers
+
+18.How does ApplicationManager and Application Master  differ
+	Application Manager: [Gate keeper for Jobs submission]
+		a. It is a component in Resource Manager
+		b. Responsible for accepting and managing the submissions from clients
+		c. Once requirements are met, it forwards it to Scheduler component of the Resource Manager
+		d. It also manages and records finished applications
+	
+	Application Master: [Responsible for the actual execution and management of individual applications/jobs]
+		a. It is also a container, which runs on the cluster
+		b. It negotiates with the Resource Manager for containers to execute the applications(jobs)
+		c. It works with Node Managers to launch and monitor the execution for the applications 
+
+19.Explain Mapreduce working?
+	Short: MapReduce is a framework/ programming model from Google for progressing and generating large data sets in a distributed environment.
+	
+	How it Works:
+		a. Map Phase:
+			i. First, each blocks of data is processed by each Map function
+			ii. Map function takes key-value pairs as input and produces intermediate key-value pairs as output
+		b. Shuffle and Sort Phase:
+			i. Output from the Map phase is shuffled and sorted based on the Keys produced by the Map function
+			ii. Now, shuffling transfers data across network from Map nodes to Reduce nodes
+			iii. Sorting ensures all the same Keys are grouped together
+		c. Reduce Phase:
+			i. Each Reduce task process one group of values that share the same keys
+			ii. It takes intermediate key-value pairs as input and produces final key-value pairs as output
+			iii. The final output is written on the HDFS for storage 
+
+20.How many mappers are created for 1 GB file?
+	Short: Default Hadoop configuration divides the blocks into 128MB size. So if the file is 1 GB, it is divided into 8 blocks of 128MB which creates 8 Mappers
+
+21.How many reducers are created for 1 GB file?
+	Short: The number of Reducers created are based on the configuration that we set at "mapreduce.job.reduces" parameter. For a 1 GB file, it assigns 1 Reducer by default.
+	
+	Long: 
+		a. We can explicitly mention the number of Reducers using '-D mapreduce.job.reduces = 1' parameter
+		b. Recommended to have multiple Reducers, if the datasets are large to avoid the overhead and improve parallelism
+ 
+22.What is combiner?
+	Short: Combiner is an optimization technique that performs partia/local aggregation on the output of the Mappers before sending it to the Reducers
+	
+	Long:
+		a. It does a local aggregation
+		b. It stores on the same mapper, this avoids a costlier process called shuffling
+		c. Combiner is for optimization
+		d. Now these partially aggregated results are sent to Reducers
+
+23.What is partitioner?
+	Short: Partitioner is a component that controls how the intermediate key-value pairs produced by the mappers are distributed across the reducers. It uses default partitioner called Hash Partitioner
+	
+	Long:
+		a. It ensures that all the values given for a key are sent to the same reducer for processing
+		
