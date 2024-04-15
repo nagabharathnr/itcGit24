@@ -1,0 +1,350 @@
+Scala
+1.What is a trait ? when to use ? 
+	Short: Trait in programming is a way to reuse the code in languages that allow single Inheritance. 
+	
+	When to Use Traits?
+		a. If we want to keep our class hierarchy simple, trait provides a way to add functionality to a class without creating a complex inheritance.
+		b. If we need to share the behaviour between classes that don't have a parent or interface.
+		c. If we want to avoid code duplication by extracting common functionality into a reusable trait.
+	
+	Ex: 
+	trait Greeter {
+	  def greet(name: String): Unit
+	}
+	
+	class DefaultGreeter extends Greeter {
+	  def greet(name: String) {
+	    println("Hello, " + name)
+	  }
+	}
+	
+2.Difference between trait and sealed trait?
+	Short: Main difference in scala is that a sealed trait restricts where it's subtypes can be defined, while a regular trait allows any class to extend it.
+	
+	Long: 
+		a. Regular trait is open, means any number of classes can inherit from it as long as they provide the required methods.
+		b. Sealed trait is closed, means it allows only fixed set of classes to inherit from it, and all inherited classes must be defined in the same file
+
+3.What is an abstract class?
+	Short: Abstract class is a class that cannot be instantiated directly, means we cannot create objects from it. It serves as a base class to other classes to inherit from and provides a partial implementation.
+	
+	Ex:  
+		 def area: Double // abstract method
+		  def perimeter: Double // abstract method
+		
+		  def printDetails() = { // non-abstract method
+		    println(s"Area: $area, Perimeter: $perimeter")
+		  }
+		}
+		
+		class Rectangle(val length: Double, val width: Double) extends Shape {
+		  def area = length * width
+		  def perimeter = 2 * (length + width)
+		}
+		
+		class Circle(val radius: Double) extends Shape {
+		  def area = Math.PI * radius * radius
+		  def perimeter = 2 * Math.PI * radius
+		}
+		
+
+4.What is the difference between an java interface and a scala trait?
+	Differences:
+		a. Multiple Inheritance:
+			i. Scala traits allows multiple inheritance - class can extend multiple traits
+			ii. Java interfaces doesn't support multiple inheritance - a class can implement multiple interfaces but can only extend one class
+				1) Ex: 2 different sets of skills we want to inherit from our parents. With scala, we can inherit both the skills but with java interface we can either inherit only one skill
+		b. Concrete Methods:
+			i. Scala - default implementation methods like abstract methods can be overridden by classes that extending the traits.
+			ii. Java - it can have only abstract methods until java 8
+				1) Ex: assume abstract methods as recipes that we want to write from scratch. With scala, are like recipe books where some of the recipes are already filled in. Java - we always start from scratch unless the version in > 8
+		c. Constructor Parameters:
+			i. Scala - can have constructor parameters allowing traits to be parameterized
+			ii. Java - cannot have constructor parameters
+				1) Ex: scala - traits can come with some special ingredients to work properly. In Java - interfaces can't ask for these special ingredients when they are used
+		   
+
+
+5.What is a singleton? 
+	Short: Singleton is like having a single instance of something. In a class, singleton make sures that only one object of that class can be ever created.
+	
+	Long: Useful, when we want to have a single/central point of control 
+
+6.What is a higher order function?
+	Short: Higher Order functions are special type of functions which can accept functions as a parameters or return function as results.
+	Ex: Think of it like a chef who not only cooks meals but also collaborates with other chefs or creates new recipes for other chefs to use.
+	def applyOperation(x: Int, operation: Int => Int): Int = {
+	  operation(x)
+	}
+	
+	val square = (x: Int) => x * x
+	val cube = (x: Int) => x * x * x
+	
+	val result1 = applyOperation(5, square) // Passes 5 and the square function
+	val result2 = applyOperation(3, cube)   // Passes 3 and the cube function
+	
+	println(result1) // Prints 25
+	println(result2) // Prints 27
+	
+
+7.What is a closure? 
+	Short: Closure is a little bundle of code that we can carry around, containing both a function and the environment in which that function was created
+	Ex: Imagine you're making a sandwich and you have all the ingredients on your kitchen counter. A closure is like wrapping up all those ingredients in a package so you can take them with you wherever you go.
+	
+	def makeMultiplier(factor: Int): Int => Int = {
+	  (x: Int) => x * factor
+	}
+	
+	val multiplyByTwo = makeMultiplier(2)
+	val multiplyByThree = makeMultiplier(3)
+	
+	val result1 = multiplyByTwo(5)  // This carries the "factor = 2" with it
+	val result2 = multiplyByThree(5) // This carries the "factor = 3" with it
+	
+	println(result1) // Prints 10
+	println(result2) // Prints 15
+	In this example, makeMultiplier is a function that takes a factor as an argument and returns another function. The returned function, which multiplies its argument by the factor, is a closure because it "remembers" the value of the factor even after makeMultiplier has finished executing. When you call multiplyByTwo(5), it still knows that the factor is 2, and similarly for multiplyByThree.
+	
+
+8.What is a companion object? What are the advantages ? Example
+	Short: 
+		a. Companion object is a buddy to a class. It's an object that has the same name as class and defined in the same file. 
+		b. Class and its object can access each other's private members, which makes them tightly linked.
+	
+	Advantages:
+		a. Factory methods: Companion objects can have factory methods like 'create'. These methods provide alternative ways to create instance of a class
+		b. Access control: Companion objects and classes can access each other's private members. Useful for encapsulation.
+		c. Static-like behaviour: Companion objects can contain methods and fields that behave like a static members in Java.
+		d. Pattern matching: Companion objects are often used in pattern matching, allowing for more concise and expressive code. 
+
+9.Nil vs Null vs null vs Nothing vs None vs Unit 
+	Nil - It is an empty list in Scala. It's an instance of the class 'List' which represents empty list.
+	Null - Null is a trait in Scala, it is a subtype of all reference types(means types that can reference objects). In Java, the 'null' used to represent absence of an object reference.
+	null - null in scala is same as null in Java, where it represents the absence of an object references. In scala, it is recommended to use 'Option' for handling absent values.
+	Nothing - Nothing is a bottom type in scala's type hierarchy. It's a subtype of other type, means it can be used in place of any other type.
+	None - None is an instance of the Option class representing the absence of values. 
+	Unit - 'Unit' is a type in scala that is similar to 'void' in java. It used to represent the function doesn't return anything
+
+10.What is pure function?
+	Short: Pure functions are, takes input performs a computation and gives back the results. Here, it doesn't depend anything on outside of the function.
+	Ex: assume we have a recipe for baking cookies. Pure function is like a recipe which makes good cookies irrespective of what's happening in kitchen or outside.
+	
+	Long: Advantages:
+		a. Predictability - Pure functions always returns same output given the same input
+		b. Easier to test as they don't rely on anything outside
+		c. Concurrency - Pure functions are thread-safe as they don't rely on any other shared mutable state.
+		d. Debugging - Pure functions makes debugging easy, because they isolate the cause of errors to their input parameters and internal logic
+	
+	Ex: 
+	def add(a: Int, b: Int): Int = {
+	  a + b
+	}
+	In this example, add is a pure function because it always returns the sum of its two arguments a and b. No matter how many times you call add(2, 3), it will always return 5.
+
+11.What is SBT and how have you used it? 
+	Short: 
+		a. Scala Build Tool used to build projects in scala and java. 
+		b. Provides features like: compiling code, managing dependencies, running tests, packaging artifacts etc
+		c. SBT uses configuration file called 'build.sbt' to define project settings.
+	
+	How I have used it?
+		a. Project setup - while creating a new scala project, chose sbt to define project settings such as name, version, scala version etc.
+		b. Dependencies Management - specified dependencies in the build.sbt file using 'libraryDependencies' from maven repository
+		c. Compilation: SBT compiles Scala source code into bytecode. By default, SBT uses the Scala compiler (scalac) to compile source files located in the src/main/scala directory and produces .class files in the target directory.
+		d. Testing: SBT supports running tests written in Scala using testing frameworks like ScalaTest, Specs2, and JUnit. You can define test configurations and run tests using the test task.
+		e. Packaging: SBT allows you to package your Scala project into executable JAR files or other distribution formats. You can use plugins like sbt-assembly to create fat JARs that include all project dependencies.
+		f. Continuous Compilation: SBT can monitor your project's source files for changes and automatically recompile them whenever a change is detected. This is useful for development workflows where you want to see immediate feedback as you make changes to your code.
+
+12.What is currying?
+	Short: Currying is like a function which takes multiple arguments and breaking it down into a series of functions, each taking one argument
+	
+	Ex: 
+	def add(x: Int, y: Int): Int = {
+	  x + y
+	}
+	
+	// Curried version
+	def curriedAdd(x: Int)(y: Int): Int = {
+	  x + y
+	}
+	val addTwo = curriedAdd(2) _ // Partially applied function
+	val result = addTwo(3) // Calls the partially applied function with y = 3
+	println(result) // Prints 5
+	
+	Long: 
+		a. Curried function takes 2 parameter lists instead of one.
+		b. It takes partial arguments as a partially applied function
+		c. Now it calls the partially applied function and takes remaining arguments and performs operation as in above code.
+
+13.Difference between currying and higher-order functions
+	Short: Currying and Higher-order functions are both advanced concepts in functional programming.
+	
+	Differences:
+		a. Purpose:
+			• Currying: Currying is about transforming a function with multiple arguments into a series of functions, each taking one argument. It's a way to decompose functions and enable partial function application.
+			• Higher-order functions: Higher-order functions are functions that can take other functions as arguments or return functions as results. They enable more flexible and powerful programming constructs, like function composition and abstraction over behavior.
+		b. Level of Abstraction:
+			• Currying: Currying operates at the level of individual functions. It's a technique applied to a specific function to break it down into smaller, more modular components.
+			• Higher-order functions: Higher-order functions are a general programming concept. They apply to functions in a broader sense, allowing functions to be treated as first-class citizens and manipulated just like any other data type.
+		
+	Ex - Currying:
+		def add(x: Int, y: Int): Int = {
+		  x + y
+		}
+		// Curried version
+		def curriedAdd(x: Int)(y: Int): Int = {
+		  x + y
+		}
+		val addTwo = curriedAdd(2) _ // Partially applied function
+		val result = addTwo(3) // Calls the partially applied function with y = 3
+		println(result) // Prints 5
+		
+	Ex - Higher-Order Functions:
+		def add(x: Int, y: Int): Int = {
+		  x + y
+		}
+		// Curried version
+		def curriedAdd(x: Int)(y: Int): Int = {
+		  x + y
+		}
+		val addTwo = curriedAdd(2) _ // Partially applied function
+		val result = addTwo(3) // Calls the partially applied function with y = 3
+		println(result) // Prints 5
+		
+
+14.Difference between var and val?
+	Short: 'var' and 'val' in scala are used to declare variables, but they have different behaviours
+	
+	'var':
+		a. Variable defined with 'var', can be mutable. Use 'var', when we expect that the variable assigned with 'var' can be changed over the time.
+		b. Ex: 
+		var counter = 0
+		counter = counter + 1 // This is valid because `counter` is mutable
+	
+	'val':
+		a. Variable defined with 'val', can be immutable. Use 'val' when we want to create constant or when we don't intend to modify it.
+		b. Ex: 
+		val pi = 3.14
+		// pi = 3.1415 // This would result in a compilation error because `pi` is immutable
+
+15.What is case class?
+	Short: 
+		a. Case class in scala is a regular class, tt's primarily used to represent immutable data and comes with a number of features that make it convenient for pattern matching, serialization, and more.
+		b. Case classes are particularly useful for representing data structures, such as records or data transfer objects, where immutability and pattern matching are important.
+	
+	Long:
+		a. Automatic toString, equals, and hashCode methods: Case classes automatically generate implementations for these methods based on the class parameters. This makes it easy to print, compare, and hash instances of case classes.
+		b. Pattern Matching: Case classes are particularly useful for pattern matching because they provide a convenient way to destructure and extract values. They can be used in pattern matching expressions to match against their properties.
+		c. Immutable by Default: Case classes are immutable by default, meaning their properties cannot be modified after they are instantiated. This makes them safer to work with, especially in concurrent or parallel programming scenarios.
+		d. Companion Object with apply Method: Case classes automatically come with a companion object that contains an apply method, allowing you to create instances of the case class without using the new keyword.
+		e. Copy Method: Case classes provide a copy method that allows you to create a copy of an instance with some of its fields modified. This is useful for creating modified copies of immutable objects.
+	
+	Ex: 
+	case class Person(name: String, age: Int)
+	
+	With this declaration, you get a bunch of functionality for free:
+	Automatic toString, equals, and hashCode methods.
+	A companion object with an apply method that allows you to create Person instances without new.
+	A copy method that allows you to create modified copies of Person instances.
+	Convenient pattern matching capabilities.
+	
+
+16.Why/when to use case class? Example
+^
+
+17.Difference between case class and normal class?
+	In Scala, both case classes and normal classes are used to define data types, but they have some important differences in terms of functionality and usage:
+	
+	Boilerplate Code:
+	
+	Case Class: Case classes automatically generate boilerplate code for common operations like toString, equals, and hashCode based on the class parameters. They also come with a companion object containing an apply method for easy instantiation.
+	Normal Class: With a normal class, you have to manually implement these methods if you need them.
+	Immutability:
+	
+	Case Class: Case classes are immutable by default, meaning their instances cannot be modified after creation.
+	Normal Class: Whether a normal class is mutable or immutable depends on how it's implemented. You have to manually enforce immutability if desired.
+	Pattern Matching:
+	
+	Case Class: Case classes are particularly useful for pattern matching because they provide a convenient way to destructure and extract values.
+	Normal Class: While you can still use pattern matching with normal classes, it requires more boilerplate code to extract values.
+	Instance Comparison:
+	
+	Case Class: Case classes compare instances based on their structure, comparing each field for equality.
+	Normal Class: Unless overridden, normal classes compare instances based on reference equality (eq), meaning two instances are considered equal only if they refer to the same memory location.
+	Syntax:
+	
+	Case Class: Case classes are defined using the case class syntax, which is more concise than defining a normal class.
+	Normal Class: Normal classes are defined using the class keyword, followed by the class name and optional constructor parameters.
+	Usage:
+	
+	Case Class: Case classes are typically used to represent data structures, such as records or data transfer objects, where immutability and pattern matching are important.
+	Normal Class: Normal classes are used for more general-purpose scenarios where specific functionality needs to be implemented.
+	
+	In summary, case classes provide convenience and conciseness for defining immutable data structures and are particularly useful for pattern matching. Normal classes offer more flexibility and control over class behavior but require more manual implementation for common operations.
+	
+
+18.Scala type hierarchy?
+	In Scala, the type hierarchy is organized in a way that every type is a subtype of Any, which is the root of the hierarchy. Any has two direct subclasses:
+	
+	AnyVal: Represents value types, such as primitive types (Int, Double, Boolean, etc.), as well as user-defined value types created with case classes.
+	
+	AnyRef: Represents reference types, which include all non-value types. This is analogous to Java's java.lang.Object. Most of the types you work with in Scala, including user-defined classes and standard library classes, are AnyRef types.
+	
+	Below AnyVal and AnyRef, Scala provides several predefined classes and traits, some of which are as follows:
+	
+	Nothing: Represents a type with no instances. It is a subtype of every other type. It's typically used to indicate abnormal termination, such as throwing an exception.
+	
+	Null: Represents the null reference. It is a subtype of all reference types (AnyRef), but not of value types (AnyVal).
+	
+	Unit: Represents the absence of a meaningful value. It's similar to void in Java and is used to indicate side effects or functions that don't return a meaningful result.
+	
+	TupleN: Represents tuples of different arities, from Tuple1 to Tuple22. Tuples are heterogeneous collections of elements, where each element can have a different type.
+	
+	Collections Hierarchy: Scala provides a rich collections library with types like List, Set, Map, etc. These types are organized in a hierarchy with common supertypes like Iterable, Seq, Set, and Map.
+	
+	Function Types: Scala provides function types like Function1, Function2, etc., which represent functions with different numbers of parameters.
+	
+	This is a simplified overview of the Scala type hierarchy. Understanding the hierarchy is essential for effective Scala programming, as it allows you to leverage common supertypes, use polymorphism, and reason about type relationships in your code.
+	
+
+19.What are partially applied functions?
+	Partially applied functions are like taking a function that expects multiple arguments and providing only some of those arguments upfront. It's a way to fix some parameters of a function and create a new function with fewer parameters.
+	
+	Imagine you have a pizza-making function that takes three ingredients: dough, sauce, and cheese. Partially applying this function with just the dough and sauce would result in a new function that only needs the cheese to make a complete pizza.
+	
+	Ex:
+		def add(x: Int, y: Int): Int = {
+		  x + y
+		}
+		
+		val addTwo = add(2, _: Int) // Partially applied function with fixed first argument
+		
+		val result = addTwo(3) // Calls the partially applied function with y = 3
+		
+		println(result) // Prints 5
+		In this example, addTwo is a partially applied function derived from the add function. By providing 2 as the first argument and using the underscore _ to indicate that the second argument is unspecified, we create a new function that only requires one argument (y) to produce a result.
+		
+		Partially applied functions are particularly useful in scenarios where you want to reuse a function with some fixed arguments or when passing functions as arguments to higher-order functions that expect functions with specific signatures. They enable more flexible and expressive programming patterns, such as currying and function composition.
+		
+
+20.What is tail recursion.
+	Tail recursion is a special form of recursion in which a function calls itself as its last action, and the result of that recursive call is directly returned without any additional processing. This pattern allows the Scala compiler to optimize the recursion into a loop, avoiding the overhead of additional stack frames for each recursive call.
+	
+	In other words, tail recursion occurs when the recursive call is the last operation performed by the function before it returns its result. This is important because it allows the compiler to optimize the recursion into an iterative loop, which avoids the risk of stack overflow errors for large inputs.
+	
+	Here's an example of a tail-recursive function in Scala:
+	
+	scala
+	Copy code
+	def factorial(n: Int): Int = {
+	  @annotation.tailrec
+	  def factorialHelper(n: Int, acc: Int): Int = {
+	    if (n <= 0) acc
+	    else factorialHelper(n - 1, n * acc)
+	  }
+	
+	  factorialHelper(n, 1)
+	}
+	In this example, the factorialHelper function is tail-recursive because the recursive call factorialHelper(n - 1, n * acc) is the last operation performed before the function returns its result. The @annotation.tailrec annotation tells the Scala compiler to check if the function is indeed tail-recursive, and if so, it optimizes the recursion into an iterative loop.
+	
+Tail recursion is important in functional programming because it allows for a more concise and expressive coding style while ensuring efficient memory usage. It's commonly used in Scala to implement recursive algorithms in a way that is both safe and efficient.
