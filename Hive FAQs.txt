@@ -1,0 +1,70 @@
+1. Difference between Data warehouse and database?
+	Database: A database is a collection of organized data that is structured to efficiently retrieve, update, and manage data. It is typically used for transactional processing (OLTP - Online Transaction Processing).
+	
+	Data warehouse: A data warehouse is a centralized repository that stores data from one or more sources. It is used for querying and analysis (OLAP - Online Analytical Processing). Data warehouses are designed for querying and analyzing large volumes of data to support decision-making processes.
+	
+2. Difference between Data warehouse and data mart?
+	Data Warehouse: A data warehouse is a centralized repository that stores data from multiple sources across an organization. It is designed to support analytical reporting and querying across the entire organization.
+	
+	Data Mart: A data mart is a subset of a data warehouse and contains a focused portion of data relevant to a specific group within the organization, such as a department or business unit. Data marts are often created for specific business needs and are typically smaller and more specialized than data warehouses.
+	
+3. Difference between OLTP vs OLAP?
+	OLTP (Online Transaction Processing): OLTP systems are designed for transaction-oriented applications, it focuses on fast query processing, maintaining data integrity, and concurrency control. They are optimized for insert, update, and delete operations. Ex: Banking transactions
+	
+	OLAP (Online Analytical Processing): OLAP systems are designed for complex queries and analysis of large volumes of data. They are optimized for read-heavy operations and support functions such as slicing, dicing, drilling, and aggregating data for decision support.
+	
+4. Why hive metadata is stored in SQL?
+	Short: Hive metadata is stored in SQL-based databases (such as Derby, MySQL, or PostgreSQL) for efficient management and querying of metadata. Storing metadata in a SQL database allows for easier integration with existing tools and systems, as well as providing robust querying capabilities for metadata operations.
+	
+5. Which SQL is the default database for hive?
+	Short: Apache Derby is the default SQL database used for storing metadata in Hive. However, you can configure Hive to use other SQL databases such as MySQL or PostgreSQL for metadata storage.
+	
+6. What is managed table?
+	Short: A managed table in Hive is a table where Hive manages both the data and the metadata. When you drop a managed table, Hive removes both the metadata and the data associated with the table from the file system.
+	
+7. What is external table?
+	Short: An external table in Hive is a table where only metadata is managed by Hive, while the data remains external to Hive in the file system. When you drop an external table, only the metadata is removed, and the data remains intact in the file system.
+	
+8. When do we use external table?
+	Short: External tables are used when you want to access data that is managed by external systems or when you want to share data across multiple Hive instances without moving the data into Hive's managed storage. They are also useful when you want to preserve data even after dropping the table's metadata.
+	
+9. Diff between managed and external table?
+	Short: In a managed table, both the metadata and the data are managed by Hive, while in an external table, only the metadata is managed by Hive, and the data remains external to Hive.
+	
+	Long:
+	Managed Table:
+		a. In a managed table, both the metadata (table schema, table properties, etc.) and the data are managed by Hive.
+		b. When you create a managed table and load data into it, Hive takes full control of the data and metadata.
+		c. When you drop a managed table, Hive removes both the metadata and the data associated with the table from the file system.
+		d. Managed tables are suitable for scenarios where you want Hive to have full control over the data, and you don't need to access the data directly outside of Hive.
+	
+	External Table:
+		a. In an external table, only the metadata (table schema, table properties, etc.) is managed by Hive, while the data remains external to Hive in the file system.
+		b. When you create an external table and load data into it, Hive only manages the metadata, and the data files remain in the specified location in the file system.
+		c. When you drop an external table, only the metadata is removed, and the data files remain intact in the specified location in the file system.
+		d. External tables are suitable for scenarios where you want to maintain the data outside of Hive's control, such as when the data is shared with other systems or when you want to preserve the data even after dropping the table's metadata.
+		
+10. What happens if you don’t provide location to external table?
+	Short: If we don't provide a location for an external table, Hive will assume that the data is located in the default location specified in the Hive configuration. If no default location is specified, Hive may encounter errors when trying to access the data.
+	
+11. Performance optimization in hive?
+	Short: Performance optimization in Hive involves various techniques such as partitioning, bucketing, using appropriate file formats (like ORC or Parquet), tuning query execution parameters, optimizing join strategies, and using indexing where applicable.
+	
+12. Explain partition table. Give example
+	Short: A partitioned table in Hive is a table that is divided into partitions based on one or more partition keys. Each partition corresponds to a specific value of the partition key(s). Partitioning is used to improve query performance by enabling Hive to perform partition cut-off, which reduces the amount of data that needs to be scanned.
+
+Ex:
+create external table ukusmar.employeelistP(emp_id Int, emp_name String, dept String) partitioned by(country String) row format delimited fields terminated by ',' stored as textfile tblproperties("skip.header.line.count"="1"); 
+	
+13. Explain bucket table. Give example
+	Short: A bucketed table in Hive is a table where data is distributed into a fixed number of buckets based on a hash function applied to one or more columns. Bucketing is used to evenly distribute data across files and can improve query performance, especially for join operations.
+	Ex: 
+	create external table ukusmar.employeelistPB1(emp_id Int, emp_name String, dept String) partitioned by(country String) clustered by (id) into 2 buckets row format delimited fields terminated by ',' stored as textfile tblproperties("skip.header.line.count"="1");
+	
+14. Diff between partition and bucketed table.
+	Partition Table: A partitioned table divides data into logical partitions based on partition keys, which can improve query performance by reducing the amount of data scanned.
+	
+	Bucketed Table: A bucketed table distributes data into a fixed number of buckets based on a hash function applied to one or more columns, which can improve query performance by evenly distributing data across files and facilitating efficient join operations.
+	
+15. How is data distributed among buckets?
+Short: Data is distributed among buckets using a hash function applied to one or more columns specified during table creation. The hash function determines which bucket a particular row belongs to based on the value of the hash function applied to the specified column(s). The goal is to evenly distribute data across buckets to achieve better query performance.
