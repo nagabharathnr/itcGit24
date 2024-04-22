@@ -1,0 +1,158 @@
+1. Describe the architecture of Spark: 
+	a. Apache Spark follows a master-slave architecture. The main components include:
+	• Driver: The process that coordinates the execution of Spark jobs.
+	• Cluster Manager: Manages resources across the Spark cluster.
+	• Worker Nodes/Executors: The actual computational units where tasks are executed.
+	• SparkContext: Entry point to Spark functionality.
+	• Distributed Storage: HDFS, S3, etc., where data resides.
+	• Cluster Manager: Manages the allocation of resources across applications.
+	• Schedulers: Allocate resources among multiple Spark applications.
+	
+2. What is a cluster manager? Which ones have you used? 
+	Short: A cluster manager allocates resources to applications. It acts as an intermediary between the application and cluster's resources.
+	Ex: YARN
+	
+	Long:
+		a. Resource Management: cluster manager overseas the allocation of resources such as CPU, Memory and Storage across nodes in cluster. It ensures, each one of it is running efficiently
+		b. Task Scheduling: schedules tasks from diff applications to the available resources in cluster 
+		c. Fault Tolerance: mechanisms are in place for handling node failures
+		d. Scalability: cluster manager dynamically scales resources up/down for a seamless workload
+		e. Integration with Cluster Environment: they are integrated with distributed storage systems like HDFS, s3 and monitoring tools
+
+3. Difference between SparkContext and SparkSession:
+	SparkContext: 
+		a. Entry point for low-level API and represents connection to a spark cluster. 
+		b. Used for RDD (Resilient Distributed Data) operations.
+		c. It is for Spark 1.x versions
+		
+	SparkSession: 
+		a. Entry point for DataFrame and Dataset higher-APIs. Introduced in Spark 2.0.
+		b. It also provides support for Spark SQL and DataFrame based operations.
+	
+4. Describe Spark modes to execute the program:
+	a. Standalone Mode:
+		a. Spark runs on its own cluster manager without depending on external resource managers
+		b. Spark Cluster consists of 1 master node(driver) and 1/2 worker nodes(executors)
+		c. We can start the spark master and worker nodes using scripts provided by the spark
+	b. YARN Mode:
+		a. YARN is a resource and job scheduling system in Hadoop
+		b. It allocates resources dynamically based on the cluster's availability
+	c. Mesos Mode:
+		a. It is a distributed resource manager that abstracts CPU, memory, storage and other computing resources across cluster
+		b. Mesos allows multiple frameworks to coexist on the same cluster 
+	d. Kubernetes Mode:
+		a. It's an open-source container orchestration which provides automated deployment, scaling and management of containerised apps
+		b. It provides elasticity and scalability
+	e. Local Mode:
+		a. In local mode, spark runs on a single machine without cluster manager
+		b. Useful for development and testing purpose of small scale spark applications
+		c. Not suitable for distributed processing
+	
+5. Difference between RDD and DF:
+	RDD (Resilient Distributed Dataset): Basic abstraction in Spark, representing a distributed collection of items.
+	DataFrame: RDD with schema information, provides higher-level APIs.
+	
+6. Transformation vs Action:
+	Transformation: Operations that transform an RDD/DF into another RDD/DF. 
+	Examples: map(), filter().
+	
+	Action: Operations that trigger computation and return results. 
+	Examples: collect(), count().
+	
+7. Narrow transformation vs Wide transformation:
+	Narrow Transformation: Each input partition contributes to only one output partition. 
+	Examples: map(), filter().
+	
+	Wide Transformation: Each input partition may contribute to multiple output partitions. 
+	Examples: groupBy(), join().
+	
+8. What is lazy evaluation: 
+	Spark delays the execution of transformations until an action is called. This optimization helps in optimizing the execution plan.
+
+9. What is DAG (Directed Acyclic Graph): 
+	DAG is a representation of the computation flow in Spark. 
+	Each RDD/DF operation creates a new stage in the DAG.
+
+10. What is lineage: 
+	Lineage is the record of transformations applied to the base dataset. It helps in recreating lost partitions or recovering from failures.
+
+11. Difference between DAG and Lineage:
+	DAG: Represents the logical flow of operations.
+	
+	Lineage: Records the transformations applied to RDDs for fault tolerance.
+	
+12. What happens when you submit a Spark job:
+	• SparkContext is created.
+	• Job is divided into stages based on transformations.
+	• Stages are converted into tasks.
+	• Tasks are executed on executors.
+	
+13. Client mode vs cluster mode:
+	Client Mode: Driver runs on the machine where the job was submitted.
+	
+	Cluster Mode: Driver runs on a cluster.
+	
+14. Difference between a DF and a DS:
+	DataFrame: Immutable distributed collection of data with schema.
+	
+	Dataset: DataFrame with type-safety and rich functional APIs.
+	
+15. Difference between a Pandas DF and a Spark DF:
+	Pandas DF: Runs on a single machine, good for small to medium-sized datasets.
+	
+	Spark DF: Distributed across multiple nodes, suitable for large datasets.
+	
+16. Coalesce vs repartition:
+	Coalesce: Decreases the number of partitions.
+	
+	Repartition: Increases or decreases the number of partitions.
+	
+17. If Coalesce and repartition can reduce the partitions then which one will you use:
+	Use coalesce() when reducing the number of partitions without shuffling is possible.
+	
+	Use repartition() when changing the number of partitions and shuffling is necessary.
+	
+18. Scenario when you need to reduce the partitions:
+	• After filtering a large dataset to a smaller one.
+	• When the data size is smaller than the available partitions.
+	
+19. When do you need to increase the partitions:
+	• When performing expensive operations like joins or aggregations.
+	• To achieve better parallelism.
+	
+20. What is a driver: 
+	The process responsible for running the main function of a Spark application and creating the SparkContext.
+
+21. What is an executor: 
+	A process responsible for executing tasks, which are sent by the driver, and keeping data in memory or disk storage across them.
+
+22. When would you use a broadcast join: 
+	When one of the datasets is small enough to fit entirely in memory and is being joined with a much larger dataset.
+
+23. What is a broadcast variable: 
+	A read-only variable cached on each machine rather than shipping a copy of it with tasks.
+
+24. Cache v/s persist:
+	• Cache: Shortcut for persisting the dataset in memory only.
+	
+	• Persist: Allows choosing storage levels (memory, disk, etc.).
+	
+25. What’s a shuffle: 
+	A data shuffle is the process of redistributing data across partitions to perform operations like join or aggregation.
+
+26. Spark performance tuning. Share use case:
+	• Optimizing partitioning for better parallelism.
+	• Caching frequently used datasets.
+	• Using appropriate transformations and actions to minimize shuffling.
+	• Leveraging broadcast variables for efficient joins.
+	
+27. Challenges faced in Spark projects you worked on:
+	• Performance optimization for large datasets.
+	• Managing resource allocation and tuning cluster configurations.
+	• Debugging complex DAGs and lineage issues.
+	• Handling skewed data distributions in joins and aggregations.
+	
+28. What is OOM error? What are the possible reasons?
+	OOM Error: Out of Memory Error, occurs when the Java Virtual Machine cannot allocate more memory.
+	
+	Possible reasons: Inefficient memory usage, large dataset processing, insufficient memory allocation for Spark jobs, or memory leaks.
